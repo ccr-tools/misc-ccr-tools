@@ -14,6 +14,7 @@ for dir in $(find "$wdir" -maxdepth 1 -type d); do
     cd "$dir"
     source PKGBUILD 2>/dev/null|| continue
     yes | makepkg -rsf | tee -a mpt.log && makepkg --source -f || badp+=( "${pkgname}" )
+    [[ -z $leavepkgz ]] || rm -f *.pkg.tar.xz
     popd >/dev/null
 done
 echo "Bad pkgz: ${badp[@]-None found}"
