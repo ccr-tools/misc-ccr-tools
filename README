@@ -1,2 +1,8 @@
 Miscellaneous scripts not included in the official Chakra 'ccr' package,
-that are meant for use with the CCR. 
+that are meant for use with the CCR.
+
+ccrdups (for TUs):
+find packages that exist in the CCR and in the repos with the same name
+
+mass-pkg-test (for CCR package maintainers):
+build all packages in a dir, report any errors
