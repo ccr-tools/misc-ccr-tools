@@ -1,0 +1,20 @@
+#!/bin/bash
+# mass-pkg-test
+# makepkg -s, makepkg --source, and report on all PKGBUILDs in subdirs
+# in a dir ($1 or cwd)
+ver=0.1
+wdir="${1-.}"
+badp=( )
+
+echo "Initializing sudo..."
+sudo -v
+for dir in $(find "$wdir" -maxdepth 1 -type d); do
+    [[ "$dir" == "." ]] && continue
+    pushd "$(pwd)" >/dev/null
+    cd "$dir"
+    source PKGBUILD 2>/dev/null|| continue
+    yes | makepkg -rsf | tee -a mpt.log && makepkg --source -f || badp+=( "${pkgname}" )
+    popd >/dev/null
+done
+echo "Bad pkgz: ${badp[@]-None found}"
+[[ -n ${badp[*]} ]] && echo "Check \$pkgname/mpt.log for build errors."
