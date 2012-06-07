@@ -9,13 +9,13 @@ badp=( )
 echo "Initializing sudo..."
 sudo -v
 for dir in $(find "$wdir" -maxdepth 1 -type d); do
+    popd >/dev/null 2>/dev/null
     [[ "$dir" == "." ]] && continue
     pushd "$(pwd)" >/dev/null
     cd "$dir"
     source PKGBUILD 2>/dev/null|| continue
     yes | makepkg -rsf | tee -a mpt.log && makepkg --source -f || badp+=( "${pkgname}" )
     [[ -z $leavepkgz ]] || rm -f *.pkg.tar.xz
-    popd >/dev/null
 done
 echo "Bad pkgz: ${badp[@]-None found}"
 [[ -n ${badp[*]} ]] && echo "Check \$pkgname/mpt.log for build errors."
